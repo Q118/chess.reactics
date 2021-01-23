@@ -5,6 +5,8 @@ import { useState } from "react";
 import Tactic from "./types/Tactic";
 import TacticBoard from "./components/TacticBoard";
 
+
+
 const TACTICS: Tactic[] = [
 	{
 		id: "1",
@@ -35,13 +37,14 @@ const TACTICS: Tactic[] = [
 function App() {
 	const [key, setKey] = useState(Date.now());
 	const [tactics, setTactics] = useState<Tactic[]>([TACTICS[0]]);
-
+//key for tactic board component to trigger re-render of component whenever a tactic changes
 	if (tactics.length === 0) {
 		return <div className="overlay-loading">Loading...</div>;
 	}
 
 	const tactic = tactics[0];
-
+// we render the tactcicBoard component passing the key, proviong the callback functions
+//in onsolve we pick a random tactc, call it nextTactic. Remove the first tactic from the tactics arrau. conccat next ext tactic to tactics array and update the key state
 	return (
 		<div className="flex-center">
 			<h1>Tactics Trainer</h1>
