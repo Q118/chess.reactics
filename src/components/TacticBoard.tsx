@@ -4,6 +4,12 @@ import Chessboard from "chessboardjsx";
 import Tactic from "../types/Tactic";
 import { getSideToPlayFromFen, makeMove, validateMove } from "../utils";
 
+//we have four props
+//tactic-object to play on the board
+//onINcorrect is a callback to call if played move was incorrect
+//onCorrect is a callback to call if played move was correct
+//onsolve is a callback to call if the tactic solved
+
 interface Props {
   tactic: Tactic;
   onIncorrect: () => void;
@@ -19,7 +25,11 @@ const TacticBoard: React.FC<Props> = ({
 }) => {
   const [fen, setFen] = useState(tactic.fen);
   const [solution, setSolution] = useState(tactic.solution);
+// fen holds initial position of the tactic and gets updated whenever a played move is correct or tactic solved
+// solution will hold the state of the tactic. as the tactic is being solved, we keep removing the first item of solution. 
+    //once the solution is empty, the tactic is solved
 
+//we are using useEffect hook to play the blunderMove and update the fen when component gets mounted
   useEffect(() => {
     setTimeout(() => {
       const next = makeMove(tactic.fen, tactic.blunderMove);
@@ -29,6 +39,9 @@ const TacticBoard: React.FC<Props> = ({
     }, 100);
   }, [tactic]);
 
+  //handleMove is called when user plays a move on the board. 
+  //the first thing we do in handleMove is checkiif the played move was valid and update fen and solution.
+  //then call onCorrect, or else call on Incorrect as the played mpve was incorrect
   const handleMove = (move: ShortMove) => {
     const next = validateMove(fen, move, solution);
 
